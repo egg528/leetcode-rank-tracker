@@ -18,17 +18,14 @@ class RankingGraphGenerator:
         plt.title('LeetCode Ranking', fontsize=16)
         plt.grid(True, which='both', linestyle=':', linewidth=0.5, color='black')
 
-        plt.xticks(rotation=45, fontsize=12)
-        plt.gca().xaxis.set_major_locator(MaxNLocator(nbins=10))
-        plt.gca().xaxis.set_major_formatter(
-            FuncFormatter(lambda x, _: df['date'][int(x)] if int(x) < len(df['date']) else ''))
+        unique_dates = df['date'].dt.strftime('%Y-%m-%d').unique()
+        plt.xticks(df['date'], unique_dates, rotation=45, fontsize=12)
 
         plt.gca().yaxis.set_major_locator(MaxNLocator(nbins=10))
         plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{int(x):,}'))
 
         for i in range(len(df)):
-            plt.annotate(f'{df["rank"][i]:,}', (df['date'][i], df['rank'][i]), textcoords="offset points",
-                         xytext=(0, 10), ha='center')
+            plt.annotate(f'{df["rank"][i]:,}', (df['date'][i], df['rank'][i]), textcoords="offset points", xytext=(0, 10), ha='center')
 
         plt.tight_layout()
 
