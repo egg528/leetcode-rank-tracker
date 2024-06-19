@@ -1,15 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter, MaxNLocator
-from tracker.meta.singleton import SingletonMeta
 
-class RankingGraphGenerator(metaclass=SingletonMeta):
+class RankingGraphGenerator:
     _SAVE_PATH = 'tracker/output/{}.png'
 
     def __init__(self, username: str):
-        if not hasattr(self, '_initialized'):
-            self._file_path = self._SAVE_PATH.format(username)
-            self._initialized = True
+        self._file_path = self._SAVE_PATH.format(username)
 
     def generate(self, df: pd.DataFrame) -> None:
         df['rank'] = pd.to_numeric(df['rank'], errors='coerce').fillna(0).astype(int)
@@ -21,14 +18,17 @@ class RankingGraphGenerator(metaclass=SingletonMeta):
         plt.title('LeetCode Ranking', fontsize=16)
         plt.grid(True, which='both', linestyle=':', linewidth=0.5, color='black')
 
-        unique_dates = df['date'].unique()
-        plt.xticks(unique_dates, rotation=45, fontsize=12)
+        plt.xticks(rotation=45, fontsize=12)
+        plt.gca().xaxis.set_major_locator(MaxNLocator(nbins=10))
+        plt.gca().xaxis.set_major_formatter(
+            FuncFormatter(lambda x, _: df['date'][int(x)] if int(x) < len(df['date']) else ''))
 
         plt.gca().yaxis.set_major_locator(MaxNLocator(nbins=10))
         plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{int(x):,}'))
 
-        for i, txt in enumerate(df['rank']):
-            plt.annotate(f'{txt:,}', (df['date'][i], df['rank'][i]), textcoords="offset points", xytext=(0,10), ha='center')
+        for i in range(len(df)):
+            plt.annotate(f'{df["rank"][i]:,}', (df['date'][i], df['rank'][i]), textcoords="offset points",
+                         xytext=(0, 10), ha='center')
 
         plt.tight_layout()
 

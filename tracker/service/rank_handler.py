@@ -33,7 +33,9 @@ class RankHandler(metaclass=SingletonMeta):
 
     def find_recent_ranking(self) -> pd.DataFrame:
         self.df['date'] = pd.to_datetime(self.df['date'])
-        return self.df.sort_values(by='date', ascending=False).head(10)
+        recent_df = self.df.sort_values(by='date', ascending=False).head(10)
+        recent_df = recent_df.reset_index(drop=True)
+        return recent_df
 
     def is_new_rank(self, date: str, rank: int) -> bool:
         if self.df.empty:

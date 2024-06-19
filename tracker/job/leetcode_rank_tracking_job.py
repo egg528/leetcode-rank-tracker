@@ -22,7 +22,7 @@ class LeetCodeRankTrackingJob:
             return
 
         self.rank_handler.upsert(get_now(), now_rank)
-        recent_ranks = self.rank_handler.find_recent_ranking()
+        recent_ranking = self.rank_handler.find_recent_ranking()
 
         # write
-        self.ranking_graph_generator.generate(recent_ranks)
+        self.ranking_graph_generator.generate(recent_ranking)
