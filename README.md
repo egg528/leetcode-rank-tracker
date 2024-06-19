@@ -35,4 +35,4 @@ date,rank
 2024-06-18,1939898
 2024-06-19,1935389
 ```
-![sample_ranking.jpg](docs/img/new_sample_ranking.jpg)
+![sample_ranking.jpg](docs/img/ranking_sample2.jpg)
